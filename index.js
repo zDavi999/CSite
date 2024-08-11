@@ -10,10 +10,17 @@ const stringsFilePath = path.join(__dirname, 'strings.json');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Rota de teste
+app.get('/teste', (req, res) => {
+  res.send('O servidor está funcionando!');
+});
+
+// Inicializa o arquivo strings.json se não existir
 if (!fs.existsSync(stringsFilePath)) {
   fs.writeFileSync(stringsFilePath, JSON.stringify([]));
 }
 
+// Rota para adicionar uma string
 app.post('/add', (req, res) => {
   const { string } = req.body;
   if (typeof string === 'string') {
@@ -31,6 +38,7 @@ app.post('/add', (req, res) => {
   }
 });
 
+// Rota para obter todas as strings
 app.get('/strings', (req, res) => {
   fs.readFile(stringsFilePath, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Failed to read file' });
@@ -39,6 +47,7 @@ app.get('/strings', (req, res) => {
   });
 });
 
+// Rota para excluir uma string
 app.delete('/delete', (req, res) => {
   const { string } = req.body;
   if (typeof string === 'string') {
@@ -56,6 +65,7 @@ app.delete('/delete', (req, res) => {
   }
 });
 
+// Inicializa o servidor
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
